@@ -84,7 +84,7 @@ abstract class AbstractController extends BaseController implements ControllerIn
     return response()->json($response);
   }
   
-  public function delete(Request $request, int $id): JsonResponse
+  public function delete(Request $request, string $id): JsonResponse
   {
     try {
       $this->service->delete($id);

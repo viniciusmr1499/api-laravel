@@ -9,11 +9,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'courses'], function () use ($router) {
     $router->get('/', 'Course\CourseController@findAll');
-    // $router->get('/{courseId}', 'CourseController@findById');
-
-    // $router->post('/', 'CourseController@create');
-    // $router->put('/{courseId}', 'CourseController@update');
-    // $router->delete('/{courseId}', 'CourseController@delete');
+    $router->get('/{courseId}', 'Course\CourseController@findById');
 
     /** TESTE */
     // $router->get('/', 'CourseController@index');    
