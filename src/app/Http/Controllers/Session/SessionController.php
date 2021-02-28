@@ -60,6 +60,7 @@ class SessionController extends BaseController
         // Redis::del('key');
 
         // if() {
+            // $id = '974302180';
         //     /** TODO inserir lógica aqui */
         // }
        
