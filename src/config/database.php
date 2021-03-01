@@ -3,6 +3,7 @@
 return [
     
     'migrations' => 'migrations',
+    'default'=>'mongodb',
 
     'connections' => [
         'mongodb' => [
