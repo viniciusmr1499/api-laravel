@@ -21,15 +21,4 @@ class SessionRepository extends AbstractRepository
   {
     $this->model = $session;
   }
-  
-  /**
-   * showByName
-   *
-   * @param  mixed $name
-   * @return array
-   */
-  public function showByName(string $name): array
-  {
-    return $this->model->where('name', $name)->toArray();
-  }
 }
