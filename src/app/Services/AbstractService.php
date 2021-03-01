@@ -40,7 +40,7 @@ abstract class AbstractService implements ServiceInterface
     return $result ? true : false;
   }
   
-  public function delete(int $id): bool
+  public function delete(string $id): bool
   {
     return $this->repository->delete($id);
   }
