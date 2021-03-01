@@ -7,6 +7,8 @@ use App\Models\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
+use League\Csv\Reader;
+use League\Csv\Statement;
 
 class SessionController extends BaseController
 {
@@ -28,7 +30,7 @@ class SessionController extends BaseController
      */
     public function index()
     {
-        return $this->session->all();
+        return $this->session->paginate(10);
     }
         
     /**
@@ -67,7 +69,7 @@ class SessionController extends BaseController
         $this->session->create($request->all());
         return response()
             ->json([
-                'data' => 'Mensagem recebida'
+                'data' => 'Message received'
             ], Response::HTTP_CREATED);
     }
     
@@ -83,7 +85,7 @@ class SessionController extends BaseController
         if(empty($session_exists)) {
             return response()
             ->json(['data' => [
-                'message' => 'A sessão fornecida não existe'
+                'message' => 'The given session does not exist'
             ]], Response::HTTP_NOT_FOUND);
         }
 
@@ -104,7 +106,7 @@ class SessionController extends BaseController
         $this->session->truncate();
         return response()
             ->json(['data' => [
-                "message" => "Todas as sessões foram encerradas"
+                "message" => "All sessions ended"
             ]], Response::HTTP_OK);
     }
     
@@ -116,9 +118,47 @@ class SessionController extends BaseController
      */
     public function upload(Request $request)
     {
-        return dd($request);
-        $result = $request->file('file');
-        return dd($result);
-        return response()->json(['data' => $result]);
+        $extension = $request->file('csv')->getClientOriginalExtension();
+        if($extension !== 'csv') {
+            return response()->json(['data' => [
+                'message' => 'Extension not allowed, try using a file with a .csv extension',
+                'isOk' => false,
+                'statusCode' => Response::HTTP_BAD_REQUEST
+            ]], Response::HTTP_BAD_REQUEST);
+        }
+
+        $stream = $request->file('csv');
+        if(!file_exists($stream)) {
+            return response()->json(['data' => [
+                'message' => 'File not exists',
+                'isOk' => false,
+                'statusCode' => Response::HTTP_BAD_REQUEST
+            ]], Response::HTTP_BAD_REQUEST);
+        }
+
+        $csv = Reader::createFromPath($stream, 'r');
+        $csv->setDelimiter(',');
+        $csv->setHeaderOffset(0);
+
+        $stmt = (new Statement());
+        $sessions = $stmt->process($csv);
+
+        foreach ($sessions as $row) {
+            $payload = [
+                '_id' => $row['_id'],
+                'name' => $row['name'],
+                'platform_type' => $row['platform_type'],
+                'contact_identifier' => $row['contact_identifier'],
+                'messages' => json_decode($row['messages'])
+            ];
+           
+            $this->session->create($payload);
+        }
+
+        return response()->json(['data' => [
+            'message' => 'Upload successfully',
+            'isOk' => true,
+            'statusCode' => Response::HTTP_CREATED
+        ]], Response::HTTP_CREATED);
     }
 }

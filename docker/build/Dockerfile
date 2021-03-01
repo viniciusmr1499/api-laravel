@@ -15,6 +15,8 @@ RUN apt-get update && \
     curl \
     php7.4 \
     php7.4-common \
+    php7.4-cli \
+    php7.4-zip \
     php7.4-dev \
     php7.4-pdo \
     php7.4-curl \
@@ -27,8 +29,7 @@ RUN apt-get update && \
     php7.4-opcache \
     php7.4-soap \
     php7.4-xml \
-    php-mongodb \
-    php-pear \
+    php7.4-mongodb \
     tzdata \
     gpg-agent \
     g++ \
@@ -49,7 +50,8 @@ RUN phpenmod \
     intl \
     mbstring \
     opcache \
-    pear \
     soap \
     xml \
     mongodb.so
+
+COPY ./docker/files/php.ini /etc/php/7.4/cli/php.ini
