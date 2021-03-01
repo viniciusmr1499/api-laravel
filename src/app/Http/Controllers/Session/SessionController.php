@@ -26,14 +26,14 @@ class SessionController extends AbstractController {
    * @param  mixed $request
    * @return void
    */
-  public function showByName(Request $request): array
-  {
-    try {
-      $session = $this->service->showByName($request);
-    }
-    catch(Exception $e) {
-      return $this->errorResponse($e, Response::HTTP_BAD_REQUEST);
-    }
-    return $this->successResponse($session, Response::HTTP_OK);
-  }
+  // public function showByName(Request $request): array
+  // {
+  //   try {
+  //     $session = $this->service->showByName($request);
+  //   }
+  //   catch(Exception $e) {
+  //     return $this->errorResponse($e, Response::HTTP_BAD_REQUEST);
+  //   }
+  //   return $this->successResponse($session, Response::HTTP_OK);
+  // }
 }
