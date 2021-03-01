@@ -28,7 +28,7 @@ class SessionController extends BaseController
      */
     public function index()
     {
-        return $this->session->all();
+        return $this->session->paginate(10);
     }
         
     /**
@@ -116,9 +116,7 @@ class SessionController extends BaseController
      */
     public function upload(Request $request)
     {
-        return dd($request);
-        $result = $request->file('file');
-        return dd($result);
-        return response()->json(['data' => $result]);
+        return dd($request->file('csv'));
+        // return response()->json(['data' => $result]);
     }
 }
