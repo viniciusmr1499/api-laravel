@@ -23,13 +23,14 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
+
 // Working cache using Redis
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // Working database noSQL mongodb
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
-
+    
 $app->withEloquent();
 
 /** loaded file in config/database.php with all connections **/

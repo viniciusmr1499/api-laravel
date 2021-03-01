@@ -6,6 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Models\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redis;
 
 class SessionController extends BaseController
 {
@@ -53,6 +54,16 @@ class SessionController extends BaseController
      */
     public function store(Request $request)
     {
+        /** Comandos básicos para buscar, criar e deletar um registro no REDIS*/
+        // Redis::get('key');
+        // Redis::set('key');
+        // Redis::del('key');
+
+        // if() {
+            // $id = '974302180';
+        //     /** TODO inserir lógica aqui */
+        // }
+       
         $this->session->create($request->all());
         return response()
             ->json([
