@@ -5,6 +5,11 @@ return [
     'migrations' => 'migrations',
     'default'=>'mongodb',
 
+    'bot' => [
+        'name'    => env('PHP_TELEGRAM_BOT_NAME', ''),
+        'api_key' => env('PHP_TELEGRAM_BOT_API_KEY', ''),
+    ],
+
     'connections' => [
         'mongodb' => [
             'driver' => 'mongodb',

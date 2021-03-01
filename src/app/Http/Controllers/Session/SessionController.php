@@ -118,31 +118,31 @@ class SessionController extends BaseController
      */
     public function upload(Request $request)
     {
-        $extension = $request->file('csv')->getClientOriginalExtension();
-        if($extension !== 'csv') {
-            return response()->json(['data' => [
-                'message' => 'Extension not allowed, try using a file with a .csv extension',
-                'isOk' => false,
-                'statusCode' => Response::HTTP_BAD_REQUEST
-            ]], Response::HTTP_BAD_REQUEST);
-        }
-
         $stream = $request->file('csv');
         if(!file_exists($stream)) {
-            return response()->json(['data' => [
-                'message' => 'File not exists',
-                'isOk' => false,
-                'statusCode' => Response::HTTP_BAD_REQUEST
-            ]], Response::HTTP_BAD_REQUEST);
+            return response()->json(
+                ['data' => [
+                    'message' => 'File not exists',
+                    'isOk' => false,
+                    'statusCode' => Response::HTTP_BAD_REQUEST
+                ]], Response::HTTP_BAD_REQUEST);
+        }
+
+        $extension = $request->file('csv')->getClientOriginalExtension();
+        if($extension !== 'csv') {
+            return response()->json(
+                ['data' => [
+                    'message' => 'Extension not allowed, try using a file with a .csv extension',
+                    'isOk' => false,
+                    'statusCode' => Response::HTTP_BAD_REQUEST
+                ]], Response::HTTP_BAD_REQUEST);
         }
 
         $csv = Reader::createFromPath($stream, 'r');
         $csv->setDelimiter(',');
         $csv->setHeaderOffset(0);
-
         $stmt = (new Statement());
         $sessions = $stmt->process($csv);
-
         foreach ($sessions as $row) {
             $payload = [
                 '_id' => $row['_id'],
@@ -155,10 +155,18 @@ class SessionController extends BaseController
             $this->session->create($payload);
         }
 
-        return response()->json(['data' => [
-            'message' => 'Upload successfully',
-            'isOk' => true,
-            'statusCode' => Response::HTTP_CREATED
-        ]], Response::HTTP_CREATED);
+        /**
+         * Checar se o nome do canal já vem com '@'
+         */
+        $bot = new \TelegramBot\Api\BotApi(env('PHP_TELEGRAM_BOT_API_KEY'));
+        $channel = "@{$request->get('canal')}";
+        $bot->sendMessage($channel, 'Upload sessions were successful!');
+
+        return response()->json(
+            ['data' => [
+                'message' => 'Upload successfully',
+                'isOk' => true,
+                'statusCode' => Response::HTTP_CREATED
+            ]], Response::HTTP_CREATED);
     }
 }
