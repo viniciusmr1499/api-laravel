@@ -23,13 +23,12 @@ class SessionRepository extends AbstractRepository
   }
   
   /**
-   * showByName
+   * findByName
    *
-   * @param  mixed $name
    * @return array
    */
-  public function showByName(string $name): array
+  public function findByName(string $name): array 
   {
-    return $this->model->where('name', $name)->toArray();
+    return $this->model::where('name', $name)->get()->toArray();
   }
 }

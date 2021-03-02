@@ -2,9 +2,14 @@
 
 namespace App\Services\Session;
 
+use App\helpers\BotTelegram;
 use App\Repositories\Session\SessionRepository;
 use \App\Services\AbstractService;
+use Exception;
 use Illuminate\Http\Request;
+use League\Csv\Reader;
+use League\Csv\Statement;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * SessionService
@@ -21,16 +26,76 @@ class SessionService extends AbstractService
   {
     $this->repository = $sessionRepository;
   }
-    
+  
   /**
-   * showByName
+   * findByName
    *
-   * @param  mixed $request
+   * @param  mixed $name
    * @return array
    */
-  public function showByName(Request $request): array
+  public function findByName(string $name): array
   {
-    $name = $request->get('name');
-    return $this->repository->showByName($name)->toArray();
+    if(empty($name)){
+      throw new Exception('Field empty or invalid');
+    }
+
+    $session = $this->repository->findByName($name);
+
+    if(empty($session)) {
+      throw new Exception('Session not found');
+    }
+
+    return $session;
+  }
+
+  public function handleFileUpload(Request $request)
+  {
+    $stream = $request->file('csv');
+    if(!file_exists($stream)) {
+        throw new Exception('File not exists');
+    }
+
+    $extension = $request->file('csv')->getClientOriginalExtension();
+    if($extension !== 'csv') {
+      throw new Exception('Extension not allowed, try using a file with a .csv extension');
+    }
+
+    $csv = Reader::createFromPath($stream, 'r');
+    $csv->setDelimiter(',');
+    $csv->setHeaderOffset(0);
+    $stmt = (new Statement());
+    $sessions = $stmt->process($csv);
+    foreach ($sessions as $row) {
+        $payload = [
+            '_id' => $row['_id'],
+            'name' => $row['name'],
+            'platform_type' => $row['platform_type'],
+            'contact_identifier' => $row['contact_identifier'],
+            'messages' => json_decode($row['messages'])
+        ];
+        
+        $this->repository->create($payload);
+    }
+
+    $channel = $request->get('channel');
+    (new BotTelegram())->sendMessage($channel, 'Upload sessions were successful!');
+  }
+  
+  /**
+   * create
+   *
+   * @param  mixed $data
+   * @return array
+   */
+  public function create(array $data): array
+  {
+    $payload = [
+      "name" => $data['name'],
+      "platform_type" => $data['platform_type'],
+      "contact_identifier" => $data['contact_identifier'],
+      "messages" => $data['messages']
+    ];
+
+    return $this->repository->create($payload);
   }
 }

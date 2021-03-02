@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Session;
 use App\Http\Controllers\AbstractController;
 use App\Services\Session\SessionService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-
+/**
+ * SessionController
+ */
 class SessionController extends AbstractController {  
   /**
    * __construct
@@ -20,19 +23,38 @@ class SessionController extends AbstractController {
   }
   
   /**
-   * show
+   * findByName
    *
    * @param  mixed $request
-   * @return void
+   * @return JsonResponse
    */
-  public function showByName(Request $request): array
+  public function findByName(Request $request): JsonResponse
   {
     try {
-    //   $session = $this->service->showByName($request);
+      $session = $this->service->findByName($request->get('name'));
+      $response = $this->successResponse($session, Response::HTTP_OK);
+    } catch(Exception $e) {
+      $response = $this->errorResponse($e);  
     }
-    catch(Exception $e) {
-      return $this->errorResponse($e, Response::HTTP_BAD_REQUEST);
+
+    return response()->json($response, $response['status_code']);
+  }
+  
+  /**
+   * handleFileUpload
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
+  public function handleFileUpload(Request $request): JsonResponse
+  {
+    try {
+      $this->service->handleFileUpload($request);
+      $response = $this->successResponse(['message' => 'Upload successfully'], Response::HTTP_OK);
+    } catch(Exception $e) {
+      $response = $this->errorResponse($e);  
     }
-    // return $this->successResponse($session, Response::HTTP_OK);
+
+    return response()->json($response, $response['status_code']);
   }
 }

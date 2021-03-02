@@ -6,33 +6,64 @@ use App\Repositories\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class AbstractRepository
- * @package App\Repositories
+ * AbstractRepository
  */
 abstract class AbstractRepository implements RepositoryInterface
 {
   protected Model $model;
-
+  
+  /**
+   * __construct
+   *
+   * @param  mixed $model
+   * @return void
+   */
   public function __construct(Model $model)
   {
     $this->model = $model;
   }
-
+  
+  /**
+   * create
+   *
+   * @param  mixed $data
+   * @return array
+   */
   public function create(array $data): array
   {
     return $this->model::create($data)->toArray();
   }
-  
+    
+  /**
+   * findAll
+   *
+   * @param  mixed $limit
+   * @param  mixed $orderBy
+   * @return array
+   */
   public function findAll(int $limit = 10, array $orderBy = []): array
   {
-    return $this->model::all()->toArray();
+    return $this->model::paginate($limit)->toArray();
+  }
+    
+  /**
+   * findByUuid
+   *
+   * @param  mixed $id
+   * @return array
+   */
+  public function findById(string $id): array
+  {
+    return $this->model::find($id)->toArray();
   }
   
-  public function findById(int $id): array
-  {
-    return $this->model::findOrFail($id)->toArray();
-  }
-
+  /**
+   * update
+   *
+   * @param  mixed $id
+   * @param  mixed $data
+   * @return bool
+   */
   public function update(int $id, array $data): bool
   { 
     $result = $this->model::find($id)
@@ -40,9 +71,25 @@ abstract class AbstractRepository implements RepositoryInterface
 
     return $result ? true : false;
   }
-  
+    
+  /**
+   * delete
+   *
+   * @param  mixed $id
+   * @return bool
+   */
   public function delete(string $id): bool
   {
     return $this->model::destroy($id) ? true : false;
+  }
+  
+  /**
+   * destroyAll
+   *
+   * @return void
+   */
+  public function destroyAll(): void
+  {
+    $this->model::truncate();
   }
 }
