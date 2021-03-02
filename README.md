@@ -19,7 +19,7 @@ Essa aplicação é um serviço para a comunicação entre usuários (clientes) 
 + Docker
 + Redis
 + Mongo
-+ telegram-bot
++ Telegram-bot
 ### Iniciar Aplicação
 ```
   docker-compose up
