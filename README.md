@@ -1,24 +1,39 @@
-# Lumen PHP Framework
+# API REST
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+Essa aplicação é um serviço para a comunicação entre usuários (clientes) e agentes (atendentes) em tempo real.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Instalação - Criando a imagem
+### 1° Caso - Iniciando sessão
++ Ao receber uma mensagem do contato, o bot irá enviar uma requisição para o servidor. Quando o servidor receber essa mensagem, ele deve criar uma nova sessão (conversa), se ela não existir, e gravar a mensagem na sessão em atendimento e retornar uma mensagem para o contato contendo <strong>Reply: mensagem recebida</strong>
 
-## Official Documentation
+### 2° Caso - Consultando a sessão
++ É necessário criar uma rota para consultar as sessões que estão em atendimento no momento.
++ Também é possível realizar uma busca pelo nome do contato.
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+### 3° Caso - Finalizando a sessão
++ É importante fornecer uma rota para finalizar a sessão que está em atendimento, ao ser finalizado a sessão deve ser excluída do banco retornado uma mensagem informando o contato da finalização.
 
-## Contributing
+## Tecnologias | Libs | Frameworks | Databases
++ PHP
++ Lumen Framework
++ Docker
++ Redis
++ Mongo
++ telegram-bot
+### Iniciar Aplicação
+```
+  docker-compose build --no-cache
+  ou
+  docker-compose up -d (em segundo plano)
+```
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Criar migration de sessões
+```
+  php artisan migrate
+  ps: Certifique-se de está na pasta "src" do projeto
+```
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Encerrar aplicação
+```
+  docker-compose down
+```
