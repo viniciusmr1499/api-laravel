@@ -1,8 +1,6 @@
 # API REST
 
 Essa aplicação é um serviço para a comunicação entre usuários (clientes) e agentes (atendentes) em tempo real.
-
-## Instalação - Criando a imagem
 ### 1° Caso - Iniciando sessão
 + Ao receber uma mensagem do contato, o bot irá enviar uma requisição para o servidor. Quando o servidor receber essa mensagem, ele deve criar uma nova sessão (conversa), se ela não existir, e gravar a mensagem na sessão em atendimento e retornar uma mensagem para o contato contendo <strong>Reply: mensagem recebida</strong>
 
