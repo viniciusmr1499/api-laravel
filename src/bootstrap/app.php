@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 // Working cache using Redis
 $app->register(Illuminate\Redis\RedisServiceProvider::class);

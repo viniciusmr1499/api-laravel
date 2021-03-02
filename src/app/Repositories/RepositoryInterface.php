@@ -21,12 +21,14 @@ interface RepositoryInterface
      * @return array
      */
     public function findAll(int $limit = 10, array $orderBy = []): array;
-
+        
     /**
-     * @param int $id
+     * findByUuid
+     *
+     * @param  mixed $id
      * @return array
      */
-    public function findById(int $id): array;
+    public function findById(string $id): array;
 
     /**
      * @param int $id
@@ -40,4 +42,11 @@ interface RepositoryInterface
      * @return bool
      */
     public function delete(string $id): bool;
+    
+    /**
+     * destroyAll
+     *
+     * @return array
+     */
+    public function destroyAll(): void;
 }

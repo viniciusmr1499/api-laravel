@@ -12,21 +12,26 @@ use Illuminate\Http\Request;
 interface ControllerInterface 
 {
   /**
-   * @param Request $request
+   * create
+   *
+   * @param  mixed $request
    * @return JsonResponse
-   */ 
+   */
   public function create(Request $request): JsonResponse;
 
   /**
    * @return JsonResponse
    */
   public function findAll(Request $request): JsonResponse;
-
+    
   /**
-   * @param int $id
+   * findById
+   *
+   * @param  mixed $request
+   * @param  mixed $id
    * @return JsonResponse
    */
-  public function findById(Request $request, int $id): JsonResponse;
+  public function findById(Request $request, string $id): JsonResponse;
 
   /**
    * @param int $id
@@ -40,4 +45,12 @@ interface ControllerInterface
    * @return JsonResponse
    */
   public function delete(Request $request, string $id): JsonResponse;
+  
+  /**
+   * destroyAll
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
+  public function destroyAll(Request $request): JsonResponse;
 }

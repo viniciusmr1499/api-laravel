@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Http\Controllers\ControllerInterface;
 use App\Services\ServiceInterface;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Exception;
 
 /**
  * Class AbstractController
  * @package App\Http\Controllers
  */
-abstract class AbstractController extends BaseController implements ControllerInterface
+class AbstractController extends BaseController implements ControllerInterface
 {
   /**
    * @param ServiceInterface $service
@@ -34,7 +34,13 @@ abstract class AbstractController extends BaseController implements ControllerIn
   { 
     $this->service = $service;
   }
-  
+    
+  /**
+   * create
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
   public function create(Request $request): JsonResponse
   {
     try {
@@ -46,19 +52,34 @@ abstract class AbstractController extends BaseController implements ControllerIn
 
     return response()->json($response, $response['status_code']);
   }
-  
+    
+  /**
+   * findAll
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
   public function findAll(Request $request): JsonResponse
   {
     try {
-      $result = $this->service->findAll();
+      $limit = $request->get('page') ? $request->get('page') : 10;
+      $result = $this->service->findAll($limit);
       $response = $this->successResponse($result, Response::HTTP_OK);
     } catch(Exception $e) {
       $response = $this->errorResponse($e);
     }
-    return response()->json($response);
+
+    return response()->json($response, $response['status_code']);
   } 
- 
-  public function findById(Request $request, int $id): JsonResponse
+   
+  /**
+   * findById
+   *
+   * @param  mixed $request
+   * @param  mixed $id
+   * @return JsonResponse
+   */
+  public function findById(Request $request, string $id): JsonResponse
   {
     try {
       $result = $this->service->findById($id);
@@ -67,9 +88,16 @@ abstract class AbstractController extends BaseController implements ControllerIn
       $response = $this->errorResponse($e);
     }
 
-    return response()->json($response);
+    return response()->json($response, $response['status_code']);
   }
-  
+    
+  /**
+   * update
+   *
+   * @param  mixed $request
+   * @param  mixed $id
+   * @return JsonResponse
+   */
   public function update(Request $request, int $id): JsonResponse
   {
     try {
@@ -81,9 +109,16 @@ abstract class AbstractController extends BaseController implements ControllerIn
       $response = $this->errorResponse($e);
     }
 
-    return response()->json($response);
+    return response()->json($response, $response['status_code']);
   }
-  
+    
+  /**
+   * delete
+   *
+   * @param  mixed $request
+   * @param  mixed $id
+   * @return JsonResponse
+   */
   public function delete(Request $request, string $id): JsonResponse
   {
     try {
@@ -94,9 +129,35 @@ abstract class AbstractController extends BaseController implements ControllerIn
       $response = $this->errorResponse($e);
     }
 
-    return response()->json($response);
+    return response()->json($response, $response['status_code']);
   }
   
+  /**
+   * destroyAll
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
+  public function destroyAll(Request $request): JsonResponse
+  {
+    try {
+      $this->service->destroyAll();
+      $response = $this->successResponse(['message' => 'All sessions ended'], Response::HTTP_OK);
+
+    } catch(Exception $e) {
+      $response = $this->errorResponse($e);
+    }
+
+    return response()->json($response, $response['status_code']);
+  }
+    
+  /**
+   * successResponse
+   *
+   * @param  mixed $data
+   * @param  mixed $statusCode
+   * @return array
+   */
   protected function successResponse(array $data = [], int $statusCode = Response::HTTP_OK): array
   {
     if(empty($data)) {
@@ -110,7 +171,14 @@ abstract class AbstractController extends BaseController implements ControllerIn
       'data' => $data,
     ];
   }
-
+  
+  /**
+   * errorResponse
+   *
+   * @param  mixed $e
+   * @param  mixed $statusCode
+   * @return array
+   */
   protected function errorResponse(Exception $e, int $statusCode = Response::HTTP_BAD_REQUEST): array
   {
     return [

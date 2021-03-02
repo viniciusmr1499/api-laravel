@@ -28,7 +28,7 @@ abstract class AbstractService implements ServiceInterface
     return $this->repository->findAll($limit, $orderBy);
   }
   
-  public function findById(int $id): array
+  public function findById(string $id): array
   {
     return $this->repository->findById($id);
   }
@@ -43,5 +43,10 @@ abstract class AbstractService implements ServiceInterface
   public function delete(string $id): bool
   {
     return $this->repository->delete($id);
+  }
+
+  public function destroyAll(): void
+  {
+    $this->repository->destroyAll();
   }
 }

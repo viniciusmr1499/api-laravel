@@ -21,4 +21,14 @@ class SessionRepository extends AbstractRepository
   {
     $this->model = $session;
   }
+  
+  /**
+   * findByName
+   *
+   * @return array
+   */
+  public function findByName(string $name): array 
+  {
+    return $this->model::where('name', $name)->get()->toArray();
+  }
 }

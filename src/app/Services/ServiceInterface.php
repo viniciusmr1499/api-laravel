@@ -14,18 +14,23 @@ interface ServiceInterface
      */
     public function create(array $data): array;
 
+        
     /**
-     * @param int $limit
-     * @param array $limit
+     * findAll
+     *
+     * @param  mixed $limit
+     * @param  mixed $orderBy
      * @return array
      */
     public function findAll(int $limit = 10, array $orderBy = []): array;
-
+       
     /**
-     * @param int $id
+     * findById
+     *
+     * @param  mixed $id
      * @return array
      */
-    public function findById(int $id): array;
+    public function findById(string $id): array;
 
     /**
      * @param int $id
@@ -39,4 +44,11 @@ interface ServiceInterface
      * @return bool
      */
     public function delete(string $id): bool;
+    
+    /**
+     * destroyAll
+     *
+     * @return bool
+     */
+    public function destroyAll(): void;
 }
