@@ -22,7 +22,7 @@ Essa aplicação é um serviço para a comunicação entre usuários (clientes) 
 + telegram-bot
 ### Iniciar Aplicação
 ```
-  docker-compose build --no-cache
+  docker-compose up
   ou
   docker-compose up -d (em segundo plano)
 ```
