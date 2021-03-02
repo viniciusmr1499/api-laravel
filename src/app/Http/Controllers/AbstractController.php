@@ -123,7 +123,7 @@ class AbstractController extends BaseController implements ControllerInterface
   {
     try {
       $this->service->delete($id);
-      $response = $this->successResponse([], Response::HTTP_OK);
+      $response = $this->successResponse(['message' => 'Deleted with success'], Response::HTTP_OK);
 
     } catch(Exception $e) {
       $response = $this->errorResponse($e);

@@ -20,7 +20,14 @@ class BotTelegram
   {
     $this->bot = new  BotApi(self::getKey());
   }
-
+  
+  /**
+   * sendMessage
+   *
+   * @param  mixed $channel
+   * @param  mixed $message
+   * @return void
+   */
   public function sendMessage(string $channel, string $message): void
   {
     if(empty($channel)) {
@@ -32,7 +39,12 @@ class BotTelegram
 
     $this->bot->sendMessage($channel, $message);
   }
-
+    
+  /**
+   * getKey
+   *
+   * @return string
+   */
   private static function getKey(): string
   {
     return  env('PHP_TELEGRAM_BOT_API_KEY');

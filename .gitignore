@@ -4,3 +4,4 @@ src/vendor
 Homestead.json
 Homestead.yaml
 .phpunit.result.cache
+*.log

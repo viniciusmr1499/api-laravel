@@ -9,7 +9,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-
+/**
+ * SessionController
+ */
 class SessionController extends AbstractController {  
   /**
    * __construct
@@ -37,7 +39,13 @@ class SessionController extends AbstractController {
 
     return response()->json($response, $response['status_code']);
   }
-
+  
+  /**
+   * handleFileUpload
+   *
+   * @param  mixed $request
+   * @return JsonResponse
+   */
   public function handleFileUpload(Request $request): JsonResponse
   {
     try {

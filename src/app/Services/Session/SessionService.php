@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Statement;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * SessionService
@@ -78,5 +79,23 @@ class SessionService extends AbstractService
 
     $channel = $request->get('channel');
     (new BotTelegram())->sendMessage($channel, 'Upload sessions were successful!');
+  }
+  
+  /**
+   * create
+   *
+   * @param  mixed $data
+   * @return array
+   */
+  public function create(array $data): array
+  {
+    $payload = [
+      "name" => $data['name'],
+      "platform_type" => $data['platform_type'],
+      "contact_identifier" => $data['contact_identifier'],
+      "messages" => $data['messages']
+    ];
+
+    return $this->repository->create($payload);
   }
 }
