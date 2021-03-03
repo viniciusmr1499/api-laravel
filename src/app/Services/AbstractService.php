@@ -50,9 +50,6 @@ abstract class AbstractService implements ServiceInterface
   
   public function delete(string $id): bool
   {
-    $result = $this->repository->findById($id);
-    Redis::del($result['chatId']);
-
     return $this->repository->delete($id);
   }
 

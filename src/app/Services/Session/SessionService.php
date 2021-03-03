@@ -7,6 +7,7 @@ use App\Repositories\Session\SessionRepository;
 use \App\Services\AbstractService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use League\Csv\Reader;
 use League\Csv\Statement;
 
@@ -122,6 +123,15 @@ class SessionService extends AbstractService
    
     $payload = array_merge($session['messages'], [$data]);
     $this->repository->update($id, $payload);
+    return true;
+  }
+
+  public function delete(string $id): bool
+  {
+    $result = $this->repository->findById($id);
+    Redis::del($result['chatId']);
+    $this->repository->delete($id);
+    (new BotTelegram())->sendMessage($result['chatId'], 'Operator ended this service', true);
     return true;
   }
 }
