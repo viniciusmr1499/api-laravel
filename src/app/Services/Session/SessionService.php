@@ -68,6 +68,7 @@ class SessionService extends AbstractService
         $payload = [
             '_id' => $row['_id'],
             'name' => $row['name'],
+            'chatId' => $request->get('channel'),
             'platform_type' => $row['platform_type'],
             'contact_identifier' => $row['contact_identifier'],
             'messages' => json_decode($row['messages'])
