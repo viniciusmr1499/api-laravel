@@ -38,3 +38,8 @@ Essa aplicação é um serviço para a comunicação entre usuários (clientes) 
 ```
   docker-compose down
 ```
+
+### Coleção da API - Insomnia
+``` 
+  Na raiz do projeto, dentro da pasta "docs", é possível localizar o arquivo.
+``` 
