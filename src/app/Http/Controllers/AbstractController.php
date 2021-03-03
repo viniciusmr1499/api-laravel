@@ -98,11 +98,11 @@ class AbstractController extends BaseController implements ControllerInterface
    * @param  mixed $id
    * @return JsonResponse
    */
-  public function update(Request $request, int $id): JsonResponse
+  public function update(Request $request, string $id): JsonResponse
   {
     try {
       $this->service->update($id, $request->all());
-
+      
       $result = $this->service->findById($id);
       $response = $this->successResponse($result, Response::HTTP_OK);
     } catch(Exception $e) {

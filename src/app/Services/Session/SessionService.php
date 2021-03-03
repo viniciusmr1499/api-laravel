@@ -7,9 +7,9 @@ use App\Repositories\Session\SessionRepository;
 use \App\Services\AbstractService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use League\Csv\Reader;
 use League\Csv\Statement;
-use Illuminate\Support\Facades\Redis;
 
 /**
  * SessionService
@@ -69,6 +69,7 @@ class SessionService extends AbstractService
         $payload = [
             '_id' => $row['_id'],
             'name' => $row['name'],
+            'chatId' => $request->get('channel'),
             'platform_type' => $row['platform_type'],
             'contact_identifier' => $row['contact_identifier'],
             'messages' => json_decode($row['messages'])
@@ -89,13 +90,48 @@ class SessionService extends AbstractService
    */
   public function create(array $data): array
   {
-    $payload = [
-      "name" => $data['name'],
-      "platform_type" => $data['platform_type'],
-      "contact_identifier" => $data['contact_identifier'],
-      "messages" => $data['messages']
-    ];
+    if(
+      empty($data['chatId']) ||
+      empty($data['name']) ||
+      empty($data['platform_type']) ||
+      empty($data['contact_identifier']) ||
+      empty($data['messages'])
+    ) {
+      throw new Exception('Invalid fields');
+    }
 
-    return $this->repository->create($payload);
+    return $this->repository->create($data);
+  }
+    
+  /**
+   * update
+   *
+   * @param  mixed $id
+   * @param  mixed $data
+   * @return bool
+   */
+  public function update(string $id, array $data): bool
+  {
+    if(empty($data) || empty($id)) {
+      return false;
+    }
+    
+    $session = $this->repository->findById($id);
+    if(empty($session)) {
+      return false;
+    }
+   
+    $payload = array_merge($session['messages'], [$data]);
+    $this->repository->update($id, $payload);
+    return true;
+  }
+
+  public function delete(string $id): bool
+  {
+    $result = $this->repository->findById($id);
+    Redis::del($result['chatId']);
+    $this->repository->delete($id);
+    (new BotTelegram())->sendMessage($result['chatId'], 'Operator ended this service', true);
+    return true;
   }
 }

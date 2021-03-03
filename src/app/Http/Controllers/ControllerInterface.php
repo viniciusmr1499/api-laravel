@@ -32,13 +32,15 @@ interface ControllerInterface
    * @return JsonResponse
    */
   public function findById(Request $request, string $id): JsonResponse;
-
+    
   /**
-   * @param int $id
-   * @param Request $request
+   * update
+   *
+   * @param  mixed $request
+   * @param  mixed $id
    * @return JsonResponse
    */
-  public function update(Request $request, int $id): JsonResponse;
+  public function update(Request $request, string $id): JsonResponse;
 
   /**
    * @param int $id

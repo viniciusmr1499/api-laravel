@@ -16,6 +16,7 @@ $router->group(['prefix' => 'api/sessions'], function () use ($router) {
   
   $router->post('/', 'Session\SessionController@create');
   $router->post('/import', 'Session\SessionController@handleFileUpload');
+  $router->put('/{id}', 'Session\SessionController@update');
   $router->delete('/{id}', 'Session\SessionController@delete');
   $router->delete('/', 'Session\SessionController@destroyAll');
 });

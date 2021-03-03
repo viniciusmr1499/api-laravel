@@ -15,10 +15,11 @@ class CreateSessionsTable extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
+            $table->string('chatId');
             $table->string('name');
             $table->string('platform_type');
             $table->string('contact_identifier');
-            $table->json('messages');
+            $table->array('messages');
             $table->timestamps();
         });
     }
