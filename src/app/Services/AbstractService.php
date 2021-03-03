@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\ServiceInterface;
 use App\Repositories\RepositoryInterface;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class AbstractService
@@ -49,6 +50,9 @@ abstract class AbstractService implements ServiceInterface
   
   public function delete(string $id): bool
   {
+    $result = $this->repository->findById($id);
+    Redis::del($result['chatId']);
+
     return $this->repository->delete($id);
   }
 

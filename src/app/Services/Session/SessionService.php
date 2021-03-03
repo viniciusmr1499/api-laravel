@@ -88,14 +88,17 @@ class SessionService extends AbstractService
    */
   public function create(array $data): array
   {
-    $payload = [
-      "name" => $data['name'],
-      "platform_type" => $data['platform_type'],
-      "contact_identifier" => $data['contact_identifier'],
-      "messages" => $data['messages']
-    ];
+    if(
+      empty($data['chatId']) ||
+      empty($data['name']) ||
+      empty($data['platform_type']) ||
+      empty($data['contact_identifier']) ||
+      empty($data['messages'])
+    ) {
+      throw new Exception('Invalid fields');
+    }
 
-    return $this->repository->create($payload);
+    return $this->repository->create($data);
   }
     
   /**

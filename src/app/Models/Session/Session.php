@@ -21,15 +21,17 @@ class Session extends Model
      */
     protected $fillable = [
         'name',
+        'chatId',
         'platform_type',
         'contact_identifier',
-        'messages'
+        'messages',
     ];
 
     /**
      * @var array
      */
     public array $rules = [
+        'chatId' => 'required|min:2|max:45|alpha',
         'name' => 'required|min:2|max:45|alpha',
         'platform_type' => 'required:min:10|max:45',
         'contact_identifier' => 'required|min:2|max:45',
