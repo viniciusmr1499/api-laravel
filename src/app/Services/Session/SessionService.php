@@ -130,8 +130,10 @@ class SessionService extends AbstractService
   {
     $result = $this->repository->findById($id);
     Redis::del($result['chatId']);
-    $this->repository->delete($id);
-    (new BotTelegram())->sendMessage($result['chatId'], 'Operator ended this service', true);
-    return true;
+    
+    $bot = new BotTelegram();
+    $bot->sendMessage($result['chatId'], 'Operator ended this service', true);
+    
+    return $this->repository->delete($id);
   }
 }

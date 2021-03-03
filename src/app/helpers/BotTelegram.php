@@ -28,19 +28,21 @@ class BotTelegram
    * @param  mixed $message
    * @return void
    */
-  public function sendMessage(string $channel, string $message, bool $isBot = false): void
+  public function sendMessage(string $channel, string $message, bool $isBot = false): bool
   {
     if(empty($channel)) {
       throw new Exception('Failed the send message to channel on telegram');
     }
 
-    $character = substr($channel, 0, 1);
-    if($character !== '@' && $isBot) {
+    if($isBot) {
       $this->bot->sendMessage($channel, $message);
+      return true;
     }
     
+    $character = substr($channel, 0, 1);
     $channel = $character === '@' ? $channel : "@{$channel}";
     $this->bot->sendMessage($channel, $message);
+    return true;
   }
     
   /**
