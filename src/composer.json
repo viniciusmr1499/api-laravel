@@ -44,6 +44,7 @@
     "prefer-stable": true,
     "scripts": {
         "dev:server": "php -S localhost:5000 -t public",
+        "migration:run": "php artisan migrate",
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]

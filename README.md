@@ -30,7 +30,7 @@ Essa aplicação é um serviço para a comunicação entre usuários (clientes) 
 
 ### Criar migration de sessões
 ```
-  php artisan migrate
+  composer run migration:run
   ps: Certifique-se de está na pasta "src" do projeto
 ```
 
