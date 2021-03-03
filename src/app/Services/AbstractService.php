@@ -32,8 +32,15 @@ abstract class AbstractService implements ServiceInterface
   {
     return $this->repository->findById($id);
   }
-   
-  public function update(int $id, array $data): bool
+     
+  /**
+   * update
+   *
+   * @param  mixed $id
+   * @param  mixed $data
+   * @return bool
+   */
+  public function update(string $id, array $data): bool
   {
     $result = $this->repository->update($id, $data);
 

@@ -29,13 +29,15 @@ interface RepositoryInterface
      * @return array
      */
     public function findById(string $id): array;
-
+        
     /**
-     * @param int $id
-     * @param array $data
+     * update
+     *
+     * @param  mixed $id
+     * @param  mixed $data
      * @return bool
      */
-    public function update(int $id, array $data): bool;
+    public function update(string $id, array $data): bool;
 
     /**
      * @param int $id

@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Statement;
-use Illuminate\Support\Facades\Redis;
 
 /**
  * SessionService
@@ -97,5 +96,28 @@ class SessionService extends AbstractService
     ];
 
     return $this->repository->create($payload);
+  }
+    
+  /**
+   * update
+   *
+   * @param  mixed $id
+   * @param  mixed $data
+   * @return bool
+   */
+  public function update(string $id, array $data): bool
+  {
+    if(empty($data) || empty($id)) {
+      return false;
+    }
+    
+    $session = $this->repository->findById($id);
+    if(empty($session)) {
+      return false;
+    }
+   
+    $payload = array_merge($session['messages'], [$data]);
+    $this->repository->update($id, $payload);
+    return true;
   }
 }

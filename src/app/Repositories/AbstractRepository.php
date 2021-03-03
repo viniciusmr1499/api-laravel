@@ -56,7 +56,7 @@ abstract class AbstractRepository implements RepositoryInterface
   {
     return $this->model::find($id)->toArray();
   }
-  
+   
   /**
    * update
    *
@@ -64,7 +64,7 @@ abstract class AbstractRepository implements RepositoryInterface
    * @param  mixed $data
    * @return bool
    */
-  public function update(int $id, array $data): bool
+  public function update(string $id, array $data): bool
   { 
     $result = $this->model::find($id)
       ->update($data);
